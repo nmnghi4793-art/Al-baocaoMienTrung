@@ -26,10 +26,11 @@ WAREHOUSES: dict[str, str] = {}
 
 # ===== ĐỌC DANH SÁCH KHO =====
 def load_warehouses() -> dict[str, str]:
-    warehouses = {}
+    warehouses: dict[str, str] = {}
     with open(WAREHOUSE_FILE, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            # Yêu cầu file CSV có 2 cột: id_kho, ten_kho
             id_kho = str(row["id_kho"]).strip()
             ten_kho = str(row["ten_kho"]).strip()
             if id_kho and ten_kho:
@@ -167,6 +168,9 @@ def main():
     WAREHOUSES = load_warehouses()
 
     token = os.environ["BOT_TOKEN"]
+    if not token:
+        raise RuntimeError("Chưa cấu hình biến môi trường BOT_TOKEN")
+
     application = ApplicationBuilder().token(token).build()
 
     # Lệnh /start
